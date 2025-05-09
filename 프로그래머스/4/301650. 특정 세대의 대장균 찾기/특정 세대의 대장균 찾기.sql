@@ -1,0 +1,20 @@
+-- 코드를 작성해주세요
+WITH RECURSIVE GENERATION AS (
+    -- 부모 테이블
+    SELECT ID, PARENT_ID, 1 AS GENERATION
+    FROM ECOLI_DATA
+    WHERE PARENT_ID IS NULL
+    
+    UNION ALL
+    
+    -- 자식 테이블
+    SELECT E.ID, E.PARENT_ID, G.GENERATION +1
+    FROM ECOLI_DATA E
+    -- 자식 부모 테이블에서 자식 테이블로 내려가면서 탐색해야 자식 노드를 탐색하 수 있음
+    JOIN GENERATION G ON E.PARENT_ID = G.ID
+)
+
+SELECT ID
+FROM GENERATION
+WHERE GENERATION = 3
+ORDER BY ID
